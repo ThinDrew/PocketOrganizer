@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#142C51"
+    android:background="@color/blue"
     android:gravity="center_vertical"
     android:layout_marginBottom="3dp"
     tools:ignore="MissingConstraints">
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Понедельник"
-        android:textColor="#187DC2"
+        android:textColor="@color/lightBlue"
         android:textSize="25sp" />
     <LinearLayout
         android:layout_width="fill_parent"
