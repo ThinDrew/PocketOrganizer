@@ -7,11 +7,13 @@ public class DayOfWeek {
     private String numberAndMonth;
     private Integer number;
     private Integer month;
+    private boolean isCurrent;
     private List<DailyNote> noteList;
 
     public DayOfWeek(String name, Integer number, Integer month) {
         this.setName(name);
         this.setNumberAndMonth(number, month);
+        this.isCurrent = false;
     }
 
     public String getName() {
@@ -38,8 +40,16 @@ public class DayOfWeek {
         else this.number = number;
 
         //Если число меньше 10, перед ним будет поставлен ноль
-        this.numberAndMonth = this.number < 10? "0" + this.number + "." : this.number.toString();
+        this.numberAndMonth = this.number < 10? "0" + this.number + "." : this.number.toString() + ".";
         this.numberAndMonth += this.month < 10? "0" + this.month : this.month.toString();
+    }
+
+    public boolean isCurrentDay(){
+        return isCurrent;
+    }
+
+    public void setCurrentDay(){
+        this.isCurrent = true;
     }
 }
 
