@@ -2,12 +2,12 @@ package com.example.pocketorganizer;
 
 public class DailyNote {
     private String title;
-    private String text;
+    private String description;
     private boolean isDone;
 
-    public DailyNote(String title, String text) {
+    public DailyNote(String title, String description) {
         this.title = title;
-        this.text = text;
+        this.description = description;
         isDone = false;
     }
 
@@ -16,7 +16,7 @@ public class DailyNote {
     }
 
     public String getText() {
-        return text;
+        return description;
     }
 
     public void setTitle(String title) {
@@ -24,7 +24,7 @@ public class DailyNote {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.description = text;
     }
 
     public boolean isCompleted() {
