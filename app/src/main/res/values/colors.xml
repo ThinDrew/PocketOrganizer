@@ -6,4 +6,15 @@
     <color name="blue">#142C51</color>
     <color name="darkBlue">#121F31</color>
     <color name="extraDarkBlue">#041124</color>
+    <color name="lightPurple">#948EB5</color>
+    <color name="grayBlue">#202A3A</color>
+    <color name="gray">#787878</color>
+    <color name="purple">#834EDA</color>
+    <color name="magenta">#DC3C76</color>
+    <color name="orange">#E57B4E</color>
+    <color name="yellow">#E8E256</color>
+    <color name="green">#66E56B</color>
+    <color name="cyan">#77E1E1</color>
+    <color name="darkRed">#451D27</color>
+    <color name="red">#FA4848</color>
 </resources>
