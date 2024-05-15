@@ -15,7 +15,7 @@ public class DailyNote {
         return title;
     }
 
-    public String getText() {
+    public String getDescription() {
         return description;
     }
 
@@ -23,7 +23,7 @@ public class DailyNote {
         this.title = title;
     }
 
-    public void setText(String text) {
+    public void setDescription(String text) {
         this.description = text;
     }
 
