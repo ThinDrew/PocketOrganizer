@@ -4,12 +4,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.ViewHolder> {
@@ -46,9 +49,19 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         holder.dayOfWeekNumberText.setText(dayOfWeek.getNumberAndMonth());
 
         if (dayOfWeek.isCurrentDay()) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));  // Устанавливаем голубой фон
-            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white)); // Устанавливаем белый цвет текста
+            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
             holder.addButton.setBackgroundResource(R.drawable.custom_highlighted_add_button);
+            LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
+            linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
+        }
+
+        // Создание RecyclerView для заметок
+        ArrayList<DailyNote> notes = dayOfWeek.getNotes();
+        if (notes != null) {
+            RecyclerView noteRecyclerView = holder.itemView.findViewById(R.id.noteRecyclerView);
+            DailyNoteAdapter noteAdapter = new DailyNoteAdapter(notes);
+            noteRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+            noteRecyclerView.setAdapter(noteAdapter);
         }
     }
 

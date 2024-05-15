@@ -1,6 +1,6 @@
 package com.example.pocketorganizer;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class DayOfWeek {
     private String name;
@@ -8,12 +8,13 @@ public class DayOfWeek {
     private Integer number;
     private Integer month;
     private boolean isCurrent;
-    private List<DailyNote> noteList;
+    private ArrayList<DailyNote> noteList;
 
     public DayOfWeek(String name, Integer number, Integer month) {
         this.setName(name);
         this.setNumberAndMonth(number, month);
         this.isCurrent = false;
+        noteList = new ArrayList<>();
     }
 
     public String getName() {
@@ -28,6 +29,14 @@ public class DayOfWeek {
         this.name = name;
     }
 
+    public ArrayList<DailyNote> getNotes(){
+        return noteList;
+    }
+
+    public void addNote(DailyNote note){
+        noteList.add(note);
+    }
+
     public void setNumberAndMonth(Integer number, Integer month){
         if(month > 12 || month < 1){
             this.month = 1;
@@ -40,7 +49,7 @@ public class DayOfWeek {
         else this.number = number;
 
         //Если число меньше 10, перед ним будет поставлен ноль
-        this.numberAndMonth = this.number < 10? "0" + this.number + "." : this.number.toString() + ".";
+        this.numberAndMonth = this.number < 10? "0" + this.number + "." : this.number + ".";
         this.numberAndMonth += this.month < 10? "0" + this.month : this.month.toString();
     }
 
