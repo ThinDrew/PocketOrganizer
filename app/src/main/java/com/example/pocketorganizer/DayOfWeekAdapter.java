@@ -1,5 +1,6 @@
 package com.example.pocketorganizer;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pocketorganizer.database.AppDatabase;
+import com.example.pocketorganizer.entities.Note;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.ViewHolder> {
     private List<DayOfWeek> dayOfWeekList;
+    private AppDatabase database;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView dayOfWeekText;
@@ -31,8 +36,9 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         }
     }
 
-    public DayOfWeekAdapter(List<DayOfWeek> dayOfWeekList) {
+    public DayOfWeekAdapter(List<DayOfWeek> dayOfWeekList, AppDatabase database) {
         this.dayOfWeekList = dayOfWeekList;
+        this.database = database;
     }
 
     @NonNull
