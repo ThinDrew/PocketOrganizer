@@ -1,6 +1,5 @@
 package com.example.pocketorganizer;
 
-import com.example.pocketorganizer.enums.DayOfWeekName;
 import com.example.pocketorganizer.enums.MonthName;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ public class CalendarHelper {
     }
 
     public List<DayOfWeek> getWeek(){
-        Calendar currentCalendar = Calendar.getInstance();
         // Устанавливаем день недели в понедельник
         this.calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         // Получаем название месяца и год
@@ -26,13 +24,8 @@ public class CalendarHelper {
         for (int i = 0; i < 7; i++) {
             int dayNumber = calendar.get(Calendar.DAY_OF_MONTH);
             int monthNumber = calendar.get(Calendar.MONTH) + 1;
-            DayOfWeek dayOfWeek = new DayOfWeek(DayOfWeekName.values()[i].toString(), dayNumber, monthNumber);
-            //Проверка на то, является ли этот день текущим
-            if (dayNumber == currentCalendar.get(Calendar.DAY_OF_MONTH) && (monthNumber == currentCalendar.get(Calendar.MONTH) + 1)){
-                if(calendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR)){
-                    dayOfWeek.setCurrentDay();
-                }
-            }
+            int yearNumber = calendar.get(Calendar.YEAR);
+            DayOfWeek dayOfWeek = new DayOfWeek(dayNumber, monthNumber, yearNumber);
             daysOfWeek.add(dayOfWeek);
             calendar.add(Calendar.DAY_OF_YEAR, 1); // Переходим к следующему дню
         }

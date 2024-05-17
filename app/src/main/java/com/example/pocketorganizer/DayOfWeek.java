@@ -1,19 +1,19 @@
 package com.example.pocketorganizer;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.ArrayList;
 
 public class DayOfWeek {
-    private String name;
-    private String numberAndMonth;
-    private Integer number;
-    private Integer month;
-    private boolean isCurrent;
+    private final String name;
+    private LocalDate date;
     private ArrayList<DailyNote> noteList;
 
-    public DayOfWeek(String name, Integer number, Integer month) {
-        this.setName(name);
-        this.setNumberAndMonth(number, month);
-        this.isCurrent = false;
+    public DayOfWeek(int number, int month, int year) {
+        this.setDate(number, month, year);
+        this.name = capitalize(this.date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("ru")));
         noteList = new ArrayList<>();
     }
 
@@ -21,44 +21,37 @@ public class DayOfWeek {
         return name;
     }
 
-    public String getNumberAndMonth() {
-        return numberAndMonth;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setName(String name){
-        this.name = name;
+    private String capitalize(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase(new Locale("ru")) + str.substring(1);
     }
 
-    public ArrayList<DailyNote> getNotes(){
+    public String getFormattedDate() {
+        // Мы используем DateTimeFormatter для форматирования даты как "dd.MM"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM");
+        return date.format(formatter);
+    }
+
+    public ArrayList<DailyNote> getNotes() {
         return noteList;
     }
 
-    public void addNote(DailyNote note){
-        noteList.add(note);
-    }
-
-    public void setNumberAndMonth(Integer number, Integer month){
-        if(month > 12 || month < 1){
-            this.month = 1;
+    public void setDate(int number, int month, int year) {
+        try {
+            this.date = LocalDate.of(year, month, number);
+        } catch (Exception e) {
+            // Если дата некорректная, устанавливаем текущую дату
+            this.date = LocalDate.now();
         }
-        else this.month = month;
-
-        if(number > 31 || number < 1){
-            this.number = 1;
-        }
-        else this.number = number;
-
-        //Если число меньше 10, перед ним будет поставлен ноль
-        this.numberAndMonth = this.number < 10? "0" + this.number + "." : this.number + ".";
-        this.numberAndMonth += this.month < 10? "0" + this.month : this.month.toString();
     }
 
-    public boolean isCurrentDay(){
-        return isCurrent;
-    }
-
-    public void setCurrentDay(){
-        this.isCurrent = true;
+    public boolean isCurrentDay() {
+        return this.date.equals(LocalDate.now());
     }
 }
-

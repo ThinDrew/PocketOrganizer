@@ -1,6 +1,5 @@
 package com.example.pocketorganizer;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketorganizer.database.AppDatabase;
-import com.example.pocketorganizer.entities.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +50,7 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         DayOfWeek dayOfWeek = dayOfWeekList.get(position);
         holder.dayOfWeekText.setText(dayOfWeek.getName());
-        holder.dayOfWeekNumberText.setText(dayOfWeek.getNumberAndMonth());
+        holder.dayOfWeekNumberText.setText(dayOfWeek.getFormattedDate());
 
         if (dayOfWeek.isCurrentDay()) {
             holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
