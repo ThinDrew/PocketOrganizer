@@ -1,5 +1,6 @@
 package com.example.pocketorganizer;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,12 +52,17 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         DayOfWeek dayOfWeek = dayOfWeekList.get(position);
         holder.dayOfWeekText.setText(dayOfWeek.getName());
         holder.dayOfWeekNumberText.setText(dayOfWeek.getFormattedDate());
-
         if (dayOfWeek.isCurrentDay()) {
             holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
             holder.addButton.setBackgroundResource(R.drawable.custom_highlighted_add_button);
             LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
             linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
+        }
+        else {
+            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
+            holder.addButton.setBackgroundResource(R.drawable.custom_add_button);
+            LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
+            linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.blue));
         }
 
         // Создание RecyclerView для заметок
@@ -72,5 +78,12 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
     @Override
     public int getItemCount() {
         return dayOfWeekList.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateData(List<DayOfWeek> newDayOfWeekList) {
+        this.dayOfWeekList.clear();
+        this.dayOfWeekList.addAll(newDayOfWeekList);
+        notifyDataSetChanged();
     }
 }

@@ -12,35 +12,51 @@ import com.example.pocketorganizer.database.AppDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
-    protected void displayWeek(CalendarHelper calendarHelper, AppDatabase database){
-        //Получение текущей недели и преобразование её в список элементов для RecyclerView
-        RecyclerView recyclerView = findViewById(R.id.weekRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DayOfWeekAdapter adapter = new DayOfWeekAdapter(calendarHelper.getWeek(), database);
-        recyclerView.setAdapter(adapter);
-        //Получение текущего месяца и года и обновление данных в TextView
-        TextView monthTextView = findViewById(R.id.monthText);
+    private RecyclerView recyclerView;
+    private DayOfWeekAdapter adapter;
+    private TextView monthTextView;
+    private CalendarHelper calendarHelper;
+    private AppDatabase database;
+
+    protected void displayWeek() {
+        // Получение текущей недели и обновление данных в адаптере
+        adapter.updateData(calendarHelper.getWeek()); // Предполагается, что у вас есть метод updateData в адаптере
+        // Обновление текущего месяца и года в TextView
         monthTextView.setText(calendarHelper.getMonthText());
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        CalendarHelper calendarHelper = new CalendarHelper();
-        AppDatabase database = AppDatabase.getInstance(getApplicationContext());
 
-        displayWeek(calendarHelper, database);
+        // Инициализация объектов
+        calendarHelper = new CalendarHelper();
+        database = AppDatabase.getInstance(getApplicationContext());
 
+        // Инициализация Views
+        recyclerView = findViewById(R.id.weekRecyclerView);
+        monthTextView = findViewById(R.id.monthText);
+
+        // Настройка RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new DayOfWeekAdapter(calendarHelper.getWeek(), database);
+        recyclerView.setAdapter(adapter);
+
+        // Отображение текущей недели
+        displayWeek();
+
+        // Настройка кнопок навигации
         ImageButton previousWeekButton = findViewById(R.id.prevWeekButton);
         previousWeekButton.setOnClickListener(v -> {
             calendarHelper.getPreviousWeek();
-            displayWeek(calendarHelper, database);
+            displayWeek();
         });
 
         ImageButton nextWeekButton = findViewById(R.id.nextWeekButton);
         nextWeekButton.setOnClickListener(v -> {
             calendarHelper.getNextWeek();
-            displayWeek(calendarHelper, database);
+            displayWeek();
         });
     }
 }
