@@ -1,4 +1,4 @@
-package com.example.pocketorganizer;
+package com.example.pocketorganizer.enums;
 
 public enum MonthName {
     Январь,
