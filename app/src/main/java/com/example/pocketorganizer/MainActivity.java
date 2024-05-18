@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.pocketorganizer.database.AppDatabase;
+import com.example.pocketorganizer.entities.Note;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,11 +22,19 @@ public class MainActivity extends AppCompatActivity {
     private CalendarHelper calendarHelper;
     private AppDatabase database;
 
-    protected void displayWeek() {
-        // Получение текущей недели и обновление данных в адаптере
-        adapter.updateData(calendarHelper.getWeek()); // Предполагается, что у вас есть метод updateData в адаптере
-        // Обновление текущего месяца и года в TextView
-        monthTextView.setText(calendarHelper.getMonthText());
+    protected void displayWeek(){
+        new Thread(() -> {
+            List<DayOfWeek> week = calendarHelper.getWeek();
+            for(int i = 0; i < calendarHelper.getWeekSize(); i++){
+                List<Note> lst = database.noteDao().getNotesForDate(week.get(i).getFormattedDate());
+                week.get(i).setNotes((ArrayList)lst);
+            }
+
+            runOnUiThread(() -> {
+                adapter.updateData(week);
+                monthTextView.setText(calendarHelper.getMonthText());
+            });
+        }).start();
     }
 
     @Override

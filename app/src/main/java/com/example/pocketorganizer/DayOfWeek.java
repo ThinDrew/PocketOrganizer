@@ -1,5 +1,7 @@
 package com.example.pocketorganizer;
 
+import com.example.pocketorganizer.entities.Note;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 public class DayOfWeek {
     private final String name;
     private LocalDate date;
-    private ArrayList<DailyNote> noteList;
+    private ArrayList<Note> noteList;
 
     public DayOfWeek(int number, int month, int year) {
         this.setDate(number, month, year);
@@ -33,13 +35,16 @@ public class DayOfWeek {
     }
 
     public String getFormattedDate() {
-        // Мы используем DateTimeFormatter для форматирования даты как "dd.MM"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM");
         return date.format(formatter);
     }
 
-    public ArrayList<DailyNote> getNotes() {
+    public ArrayList<Note> getNotes() {
         return noteList;
+    }
+
+    public void setNotes(ArrayList<Note> notes){
+        this.noteList = notes;
     }
 
     public void setDate(int number, int month, int year) {

@@ -8,10 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pocketorganizer.entities.Note;
+
 import java.util.ArrayList;
 
 public class DailyNoteAdapter extends RecyclerView.Adapter<DailyNoteAdapter.ViewHolder> {
-    private ArrayList<DailyNote> noteList;
+    private ArrayList<Note> noteList;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView titleText;
@@ -24,7 +26,7 @@ public class DailyNoteAdapter extends RecyclerView.Adapter<DailyNoteAdapter.View
         }
     }
 
-    public DailyNoteAdapter(ArrayList<DailyNote> noteList) {
+    public DailyNoteAdapter(ArrayList<Note> noteList) {
         this.noteList = noteList;
     }
 
@@ -37,7 +39,7 @@ public class DailyNoteAdapter extends RecyclerView.Adapter<DailyNoteAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        DailyNote note = noteList.get(position);
+        Note note = noteList.get(position);
         holder.titleText.setText(note.getTitle());
         holder.descriptionText.setText(note.getDescription());
     }

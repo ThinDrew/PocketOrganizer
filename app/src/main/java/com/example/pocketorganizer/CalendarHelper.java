@@ -9,6 +9,7 @@ import java.util.List;
 public class CalendarHelper {
     private Calendar calendar;
     private String monthText;
+    public static final int weekSize = 7;
     public CalendarHelper(){
         this.calendar = Calendar.getInstance();
     }
@@ -21,7 +22,7 @@ public class CalendarHelper {
         this.monthText += " " + this.calendar.get(Calendar.YEAR);
         //Вывод текущей недели в список
         List<DayOfWeek> daysOfWeek = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < weekSize; i++) {
             int dayNumber = calendar.get(Calendar.DAY_OF_MONTH);
             int monthNumber = calendar.get(Calendar.MONTH) + 1;
             int yearNumber = calendar.get(Calendar.YEAR);
@@ -32,6 +33,10 @@ public class CalendarHelper {
         calendar.add(Calendar.DAY_OF_YEAR, -1);
         this.calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         return daysOfWeek;
+    }
+
+    public int getWeekSize(){
+        return weekSize;
     }
 
     public String getMonthText(){

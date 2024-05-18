@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketorganizer.database.AppDatabase;
+import com.example.pocketorganizer.entities.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         }
 
         // Создание RecyclerView для заметок
-        ArrayList<DailyNote> notes = dayOfWeek.getNotes();
+        ArrayList<Note> notes = dayOfWeek.getNotes();
         if (notes != null) {
             RecyclerView noteRecyclerView = holder.itemView.findViewById(R.id.noteRecyclerView);
             DailyNoteAdapter noteAdapter = new DailyNoteAdapter(notes);
