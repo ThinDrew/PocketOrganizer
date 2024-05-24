@@ -1,13 +1,18 @@
-package com.example.pocketorganizer;
+package com.example.pocketorganizer.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.pocketorganizer.CalendarHelper;
+import com.example.pocketorganizer.DayOfWeek;
+import com.example.pocketorganizer.DayOfWeekAdapter;
+import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.entities.Note;
 
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         // Отображение текущей недели
         displayWeek();
 
-        // Настройка кнопок навигации
+        // Обработка кнопок навигации
         ImageButton previousWeekButton = findViewById(R.id.prevWeekButton);
         previousWeekButton.setOnClickListener(v -> {
             calendarHelper.getPreviousWeek();
@@ -69,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
         nextWeekButton.setOnClickListener(v -> {
             calendarHelper.getNextWeek();
             displayWeek();
+        });
+
+        //Обработка кнопки аккаунта/настроек
+        ImageButton settingsButton = findViewById(R.id.accountButton);
+        settingsButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         });
     }
 }
