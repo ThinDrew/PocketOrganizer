@@ -21,8 +21,8 @@
     <!-- Cтиль для AlertDialog -->
     <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
         <!-- Здесь вы можете определить любой атрибут, который хотите изменить -->
-        <item name="android:windowBackground">@drawable/dialog_background</item>
-        <item name="android:background">@drawable/dialog_background</item>
+        <item name="android:windowBackground">@drawable/blue_background</item>
+        <item name="android:background">@drawable/blue_background</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">18sp</item>
         <!-- Убираем серую подложку -->

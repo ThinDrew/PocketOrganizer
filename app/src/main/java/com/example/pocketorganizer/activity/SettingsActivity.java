@@ -1,10 +1,13 @@
 package com.example.pocketorganizer.activity;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +32,17 @@ public class SettingsActivity extends AppCompatActivity {
     private void deleteAllNotes(){
         AppDatabase database = AppDatabase.getInstance(getApplicationContext());
         new Thread(() -> database.noteDao().deleteAllNotes()).start();
+
+        //Отображение короткого всплывающего уведомления
+        LayoutInflater inflater = getLayoutInflater();
+        View customToastView = inflater.inflate(R.layout.custom_toast, null);
+        TextView toastMessage = customToastView.findViewById(R.id.custom_toast_message);
+        toastMessage.setText("Все заметки удалены");
+
+        Toast customToast = new Toast(getApplicationContext());
+        customToast.setDuration(Toast.LENGTH_SHORT);
+        customToast.setView(customToastView);
+        customToast.show();
     }
 
     @Override
