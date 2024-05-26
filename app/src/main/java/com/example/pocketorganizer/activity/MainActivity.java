@@ -1,5 +1,6 @@
 package com.example.pocketorganizer.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.pocketorganizer.CalendarHelper;
 import com.example.pocketorganizer.DayOfWeek;
-import com.example.pocketorganizer.DayOfWeekAdapter;
+import com.example.pocketorganizer.adapter.DayOfWeekAdapter;
 import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.entities.Note;
@@ -20,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final int REQUEST_CODE_ADD_NOTE = 1;
+    public static final int REQUEST_CODE_SETTINGS = 2;
     private RecyclerView recyclerView;
     private DayOfWeekAdapter adapter;
     private TextView monthTextView;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             List<DayOfWeek> week = calendarHelper.getWeek();
             for(int i = 0; i < calendarHelper.getWeekSize(); i++){
-                List<Note> lst = database.noteDao().getNotesForDate(week.get(i).getFormattedDate());
+                List<Note> lst = database.noteDao().getNotesForDate(week.get(i).getDate().toString());
                 week.get(i).setNotes((ArrayList)lst);
             }
 
@@ -80,7 +82,35 @@ public class MainActivity extends AppCompatActivity {
         ImageButton settingsButton = findViewById(R.id.accountButton);
         settingsButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_SETTINGS);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Если закрылось окно настроек
+        if (requestCode == REQUEST_CODE_SETTINGS) {
+            displayWeek();
+        }
+        //Если закрылось окно добавления заметки
+        else if (requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK) {
+            if (data != null) {
+                String title = data.getStringExtra("noteTitle");
+                String content = data.getStringExtra("noteDescription");
+                String date = data.getStringExtra("noteDate");
+
+                new Thread(() -> {
+                    // Сохранение заметки в базу данных
+                    Note note = new Note();
+                    note.setTitle(title);
+                    note.setDescription(content);
+                    note.setDate(date);
+                    database.noteDao().insert(note);
+
+                    runOnUiThread(this::displayWeek);
+                }).start();
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
-package com.example.pocketorganizer;
+package com.example.pocketorganizer.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pocketorganizer.DayOfWeek;
+import com.example.pocketorganizer.R;
+import com.example.pocketorganizer.activity.AddNoteActivity;
+import com.example.pocketorganizer.activity.MainActivity;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.entities.Note;
 
@@ -21,7 +26,6 @@ import java.util.List;
 
 public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.ViewHolder> {
     private List<DayOfWeek> dayOfWeekList;
-    private AppDatabase database;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView dayOfWeekText;
@@ -38,7 +42,6 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
 
     public DayOfWeekAdapter(List<DayOfWeek> dayOfWeekList, AppDatabase database) {
         this.dayOfWeekList = dayOfWeekList;
-        this.database = database;
     }
 
     @NonNull
@@ -74,6 +77,13 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
             noteRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
             noteRecyclerView.setAdapter(noteAdapter);
         }
+
+        holder.addButton.setOnClickListener(view -> {
+            Intent intent = new Intent(holder.itemView.getContext(), AddNoteActivity.class);
+            String date = dayOfWeekList.get(position).getDate().toString();
+            intent.putExtra("noteDate", date);
+            ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_ADD_NOTE);
+        });
     }
 
     @Override
