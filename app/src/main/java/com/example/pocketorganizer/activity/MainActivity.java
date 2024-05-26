@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Настройка RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DayOfWeekAdapter(calendarHelper.getWeek(), database);
+        adapter = new DayOfWeekAdapter(calendarHelper.getWeek());
         recyclerView.setAdapter(adapter);
 
         // Отображение текущей недели
@@ -96,15 +96,18 @@ public class MainActivity extends AppCompatActivity {
         //Если закрылось окно добавления заметки
         else if (requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK) {
             if (data != null) {
-                String title = data.getStringExtra("noteTitle");
-                String content = data.getStringExtra("noteDescription");
+                String titleInput = data.getStringExtra("noteTitle");
+                String descriptionInput = data.getStringExtra("noteDescription");
                 String date = data.getStringExtra("noteDate");
+
+                final String title = (titleInput == null || titleInput.isEmpty()) ? "Заметка" : titleInput;
+                final String description = (descriptionInput == null || descriptionInput.isEmpty()) ? "Без описания" : descriptionInput;
 
                 new Thread(() -> {
                     // Сохранение заметки в базу данных
                     Note note = new Note();
                     note.setTitle(title);
-                    note.setDescription(content);
+                    note.setDescription(description);
                     note.setDate(date);
                     database.noteDao().insert(note);
 

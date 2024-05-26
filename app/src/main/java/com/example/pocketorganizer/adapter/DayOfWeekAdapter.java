@@ -18,7 +18,6 @@ import com.example.pocketorganizer.DayOfWeek;
 import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.activity.AddNoteActivity;
 import com.example.pocketorganizer.activity.MainActivity;
-import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.entities.Note;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         }
     }
 
-    public DayOfWeekAdapter(List<DayOfWeek> dayOfWeekList, AppDatabase database) {
+    public DayOfWeekAdapter(List<DayOfWeek> dayOfWeekList) {
         this.dayOfWeekList = dayOfWeekList;
     }
 
