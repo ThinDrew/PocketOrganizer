@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     note.setTitle(title);
                     note.setDescription(description);
                     note.setDate(date);
+                    note.setChecked(false);
                     database.noteDao().insert(note);
 
                     runOnUiThread(this::displayWeek);

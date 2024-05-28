@@ -77,6 +77,7 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
             noteRecyclerView.setAdapter(noteAdapter);
         }
 
+        // Обработка кнопки для добавления заметки
         holder.addButton.setOnClickListener(view -> {
             Intent intent = new Intent(holder.itemView.getContext(), AddNoteActivity.class);
             String date = dayOfWeekList.get(position).getDate().toString();

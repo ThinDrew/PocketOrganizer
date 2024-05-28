@@ -8,6 +8,7 @@
     android:background="@color/extraDarkBlue"
     android:gravity="center_vertical"
     android:layout_marginBottom="3dp"
+    android:id="@+id/noteBackground"
     tools:ignore="MissingConstraints">
 
     <View

@@ -14,6 +14,8 @@ public class Note {
 
     private String date;
 
+    private boolean checked;
+
     // Getters и Setters
     public int getId() {
         return id;
@@ -45,5 +47,15 @@ public class Note {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setChecked(boolean checked){
+        this.checked = checked;
+    }
+
+    public void check() {this.checked = !this.checked;}
+
+    public boolean isChecked(){
+        return this.checked;
     }
 }
