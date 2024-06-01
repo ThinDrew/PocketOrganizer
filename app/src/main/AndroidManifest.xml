@@ -16,7 +16,7 @@
             android:name=".activity.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.AddNoteActivity"
+            android:name=".activity.NoteEditorActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"

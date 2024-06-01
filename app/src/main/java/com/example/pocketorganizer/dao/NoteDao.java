@@ -25,6 +25,9 @@ public interface NoteDao {
     @Query("SELECT * FROM notes WHERE date = :date")
     List<Note> getNotesForDate(String date);
 
+    @Query("SELECT * FROM notes WHERE id = :noteId LIMIT 1")
+    Note getById(int noteId);
+
     @Query("SELECT * FROM notes")
     List<Note> getAllNotes();
 

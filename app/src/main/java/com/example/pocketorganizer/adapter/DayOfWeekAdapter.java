@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketorganizer.DayOfWeek;
 import com.example.pocketorganizer.R;
-import com.example.pocketorganizer.activity.AddNoteActivity;
+import com.example.pocketorganizer.activity.NoteEditorActivity;
 import com.example.pocketorganizer.activity.MainActivity;
 import com.example.pocketorganizer.entities.Note;
 
@@ -79,10 +79,10 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
 
         // Обработка кнопки для добавления заметки
         holder.addButton.setOnClickListener(view -> {
-            Intent intent = new Intent(holder.itemView.getContext(), AddNoteActivity.class);
+            Intent intent = new Intent(holder.itemView.getContext(), NoteEditorActivity.class);
             String date = dayOfWeekList.get(position).getDate().toString();
             intent.putExtra("noteDate", date);
-            ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_ADD_NOTE);
+            ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_NOTE);
         });
     }
 

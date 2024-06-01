@@ -1,6 +1,7 @@
 package com.example.pocketorganizer.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketorganizer.R;
+import com.example.pocketorganizer.activity.MainActivity;
+import com.example.pocketorganizer.activity.NoteEditorActivity;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.entities.Note;
 
@@ -62,6 +65,13 @@ public class DailyNoteAdapter extends RecyclerView.Adapter<DailyNoteAdapter.View
             setNoteCompleted(holder, note.isChecked());
             notifyDataSetChanged();
             updateNoteInDatabase(holder, note);
+        });
+
+        // Обработка нажатия на заметку (редактирование заметки)
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(holder.itemView.getContext(), NoteEditorActivity.class);
+            intent.putExtra("note_id", note.getId());
+            ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_NOTE);
         });
     }
 

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static final int REQUEST_CODE_ADD_NOTE = 1;
+    public static final int REQUEST_CODE_EDIT_NOTE = 1;
     public static final int REQUEST_CODE_SETTINGS = 2;
     private RecyclerView recyclerView;
     private DayOfWeekAdapter adapter;
@@ -93,28 +93,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_SETTINGS) {
             displayWeek();
         }
-        //Если закрылось окно добавления заметки
-        else if (requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK) {
-            if (data != null) {
-                String titleInput = data.getStringExtra("noteTitle");
-                String descriptionInput = data.getStringExtra("noteDescription");
-                String date = data.getStringExtra("noteDate");
-
-                final String title = (titleInput == null || titleInput.isEmpty()) ? "Заметка" : titleInput;
-                final String description = (descriptionInput == null || descriptionInput.isEmpty()) ? "Без описания" : descriptionInput;
-
-                new Thread(() -> {
-                    // Сохранение заметки в базу данных
-                    Note note = new Note();
-                    note.setTitle(title);
-                    note.setDescription(description);
-                    note.setDate(date);
-                    note.setChecked(false);
-                    database.noteDao().insert(note);
-
-                    runOnUiThread(this::displayWeek);
-                }).start();
-            }
+        //Если закрылось окно редактора заметки
+        else if (requestCode == REQUEST_CODE_EDIT_NOTE && resultCode == RESULT_OK) {
+            displayWeek();
         }
     }
 }
