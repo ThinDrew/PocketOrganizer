@@ -25,6 +25,9 @@ import java.util.List;
 
 public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.ViewHolder> {
     private List<DayOfWeek> dayOfWeekList;
+    private List<Note> somedayNotes;
+    private static final int TYPE_DAY_OF_WEEK = 0;
+    private static final int TYPE_SOMEDAY = 1;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView dayOfWeekText;
@@ -43,6 +46,15 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         this.dayOfWeekList = dayOfWeekList;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position < dayOfWeekList.size()) {
+            return TYPE_DAY_OF_WEEK;
+        } else {
+            return TYPE_SOMEDAY;
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -51,29 +63,52 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        DayOfWeek dayOfWeek = dayOfWeekList.get(position);
-        holder.dayOfWeekText.setText(dayOfWeek.getName());
-        holder.dayOfWeekNumberText.setText(dayOfWeek.getFormattedDate());
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Если это обычный день недели
+        if (getItemViewType(position) == TYPE_DAY_OF_WEEK) {
+            DayOfWeek dayOfWeek = dayOfWeekList.get(position);
+            holder.dayOfWeekText.setText(dayOfWeek.getName());
+            holder.dayOfWeekNumberText.setText(dayOfWeek.getFormattedDate());
 
-        setDayToCurrent(holder, dayOfWeek.isCurrentDay());
+            setDayToCurrent(holder, dayOfWeek.isCurrentDay());
 
-        // Создание RecyclerView для заметок
-        ArrayList<Note> notes = dayOfWeek.getNotes();
-        if (notes != null) {
-            RecyclerView noteRecyclerView = holder.itemView.findViewById(R.id.noteRecyclerView);
-            DailyNoteAdapter noteAdapter = new DailyNoteAdapter(notes);
-            noteRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-            noteRecyclerView.setAdapter(noteAdapter);
+            // Создание RecyclerView для заметок
+            ArrayList<Note> notes = dayOfWeek.getNotes();
+            if (notes != null) {
+                RecyclerView noteRecyclerView = holder.itemView.findViewById(R.id.noteRecyclerView);
+                DailyNoteAdapter noteAdapter = new DailyNoteAdapter(notes);
+                noteRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+                noteRecyclerView.setAdapter(noteAdapter);
+            }
+
+            // Обработка кнопки для добавления заметки
+            holder.addButton.setOnClickListener(view -> {
+                Intent intent = new Intent(holder.itemView.getContext(), NoteEditorActivity.class);
+                String date = dayOfWeekList.get(position).getDate().toString();
+                intent.putExtra("noteDate", date);
+                ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_NOTE);
+            });
         }
+        // Если это секция "Когда-нибудь"
+        else {
+            holder.dayOfWeekText.setText("Когда-нибудь");
+            holder.dayOfWeekNumberText.setText("");
+            // Создание RecyclerView для заметок
+            ArrayList<Note> notes = (ArrayList<Note>)somedayNotes;
+            if (notes != null) {
+                RecyclerView noteRecyclerView = holder.itemView.findViewById(R.id.noteRecyclerView);
+                DailyNoteAdapter noteAdapter = new DailyNoteAdapter(notes);
+                noteRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+                noteRecyclerView.setAdapter(noteAdapter);
+            }
 
-        // Обработка кнопки для добавления заметки
-        holder.addButton.setOnClickListener(view -> {
-            Intent intent = new Intent(holder.itemView.getContext(), NoteEditorActivity.class);
-            String date = dayOfWeekList.get(position).getDate().toString();
-            intent.putExtra("noteDate", date);
-            ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_NOTE);
-        });
+            // Обработка кнопки для добавления заметки
+            holder.addButton.setOnClickListener(view -> {
+                Intent intent = new Intent(holder.itemView.getContext(), NoteEditorActivity.class);
+                intent.putExtra("noteDate", "Someday");
+                ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_NOTE);
+            });
+        }
     }
 
     private void setDayToCurrent(DayOfWeekAdapter.ViewHolder holder, boolean isCurrent) {
@@ -93,13 +128,15 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
 
     @Override
     public int getItemCount() {
-        return dayOfWeekList.size();
+        // +1 для секции "Когда-нибудь"
+        return dayOfWeekList.size() + 1;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void updateData(List<DayOfWeek> newDayOfWeekList) {
+    public void updateData(List<DayOfWeek> newDayOfWeekList, List<Note> somedayNotes) {
         this.dayOfWeekList.clear();
         this.dayOfWeekList.addAll(newDayOfWeekList);
+        this.somedayNotes = somedayNotes;
         notifyDataSetChanged();
     }
 }

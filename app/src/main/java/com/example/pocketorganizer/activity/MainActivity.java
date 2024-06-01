@@ -34,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
             List<DayOfWeek> week = calendarHelper.getWeek();
             for(int i = 0; i < calendarHelper.getWeekSize(); i++){
                 List<Note> lst = database.noteDao().getNotesForDate(week.get(i).getDate().toString());
-                week.get(i).setNotes((ArrayList)lst);
+                week.get(i).setNotes((ArrayList<Note>)lst);
             }
 
+            List<Note> somedayNotes = database.noteDao().getNotesForDate("Someday");
+
             runOnUiThread(() -> {
-                adapter.updateData(week);
+                adapter.updateData(week, somedayNotes);
                 monthTextView.setText(calendarHelper.getMonthText());
             });
         }).start();
