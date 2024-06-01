@@ -8,14 +8,6 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:colorBackground">@color/darkBlue</item>
         <item name="colorOnBackground">@color/white</item>
-
-        <item name="buttonStyle">@style/RoundedButton</item>
-    </style>
-
-    <!-- Define custom button style -->
-    <style name="RoundedButton" parent="Widget.MaterialComponents.Button">
-        <item name="android:background">@drawable/rounded_button</item>
-        <item name="android:textColor">@color/white</item>
     </style>
 
     <!-- Cтиль для AlertDialog -->

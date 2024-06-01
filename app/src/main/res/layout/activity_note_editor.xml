@@ -49,19 +49,23 @@
         android:id="@+id/deleteNoteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
-        android:text="Удалить"
-        style="@style/RoundedButton"/>
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:backgroundTint="@color/red"
+        android:textColor="@color/darkBlue"
+        android:text="Удалить"/>
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
-        android:text="Сохранить"
-        style="@style/RoundedButton"/>
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Сохранить"/>
 </LinearLayout>
