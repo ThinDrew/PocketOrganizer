@@ -55,18 +55,8 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
         DayOfWeek dayOfWeek = dayOfWeekList.get(position);
         holder.dayOfWeekText.setText(dayOfWeek.getName());
         holder.dayOfWeekNumberText.setText(dayOfWeek.getFormattedDate());
-        if (dayOfWeek.isCurrentDay()) {
-            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
-            holder.addButton.setBackgroundResource(R.drawable.custom_highlighted_add_button);
-            LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
-            linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
-        }
-        else {
-            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
-            holder.addButton.setBackgroundResource(R.drawable.custom_add_button);
-            LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
-            linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.blue));
-        }
+
+        setDayToCurrent(holder, dayOfWeek.isCurrentDay());
 
         // Создание RecyclerView для заметок
         ArrayList<Note> notes = dayOfWeek.getNotes();
@@ -84,6 +74,21 @@ public class DayOfWeekAdapter extends RecyclerView.Adapter<DayOfWeekAdapter.View
             intent.putExtra("noteDate", date);
             ((MainActivity) holder.itemView.getContext()).startActivityForResult(intent, MainActivity.REQUEST_CODE_EDIT_NOTE);
         });
+    }
+
+    private void setDayToCurrent(DayOfWeekAdapter.ViewHolder holder, boolean isCurrent) {
+        if (isCurrent) {
+            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+            holder.addButton.setBackgroundResource(R.drawable.custom_highlighted_add_button);
+            LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
+            linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
+        }
+        else {
+            holder.dayOfWeekText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightBlue));
+            holder.addButton.setBackgroundResource(R.drawable.custom_add_button);
+            LinearLayout linearLayout = holder.itemView.findViewById(R.id.dayOfWeekBackground);
+            linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.blue));
+        }
     }
 
     @Override
