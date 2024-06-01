@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pocketorganizer.R;
@@ -19,6 +20,14 @@ public class NoteEditorActivity extends AppCompatActivity {
     private boolean isEditMode = false;
     private Note currentNote;
 
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(this, R.style.CustomAlertDialog)
+                .setTitle("Удаление заметки")
+                .setMessage("Вы уверены, что хотите удалить эту заметку?")
+                .setPositiveButton("Удалить", (dialog, which) -> deleteNote())
+                .setNegativeButton("Отменить", null)
+                .show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +67,7 @@ public class NoteEditorActivity extends AppCompatActivity {
 
         //Обработка кнопок
         saveButton.setOnClickListener(view -> saveNote());
-        deleteButton.setOnClickListener(view -> deleteNote());
+        deleteButton.setOnClickListener(view -> showDeleteConfirmationDialog());
     }
 
     private void saveNote() {
