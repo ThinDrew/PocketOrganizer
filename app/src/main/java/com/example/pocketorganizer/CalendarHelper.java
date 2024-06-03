@@ -43,13 +43,17 @@ public class CalendarHelper {
         return this.monthText;
     }
 
-    public List<DayOfWeek> getPreviousWeek(){
+    public void getPreviousWeek(){
         this.calendar.add(Calendar.DAY_OF_YEAR, -7);
-        return this.getWeek();
     }
 
-    public List<DayOfWeek> getNextWeek(){
+    public void getNextWeek(){
         this.calendar.add(Calendar.DAY_OF_YEAR, +7);
-        return this.getWeek();
+    }
+
+    public void setWeekByDate(int day, int month, int year){
+        this.calendar.set(year, month, day);
+        // Помогает применить значения
+        this.calendar.getTimeInMillis();
     }
 }

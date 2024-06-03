@@ -25,14 +25,37 @@
         <item name="buttonBarPositiveButtonStyle">@style/CustomAlertDialogRedButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/CustomAlertDialogBlueButton</item>
     </style>
+
     <!-- Красный цвет для текста кнопки в AlertDialog -->
     <style name="CustomAlertDialogRedButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/red</item>
         <item name="textAllCaps">false</item>
     </style>
+
     <!-- Голубой цвет для текста кнопки в AlertDialog -->
     <style name="CustomAlertDialogBlueButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/lightBlue</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- Высоком уровне компоненты стиля для MaterialDatePicker -->
+    <style name="CustomMaterialDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="materialCalendarStyle">@style/CustomMaterialCalendarStyle</item>
+    </style>
+
+    <!-- Стиль календаря -->
+    <style name="CustomMaterialCalendarStyle" parent="Widget.MaterialComponents.MaterialCalendar">
+        <item name="yearStyle">@style/CustomYearStyle</item>
+        <item name="dayStyle">@style/CustomDayStyle</item>
+    </style>
+
+    <!-- Стиль для дня -->
+    <style name="CustomDayStyle" parent="Widget.MaterialComponents.MaterialCalendar.Day">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Стиль для года -->
+    <style name="CustomYearStyle" parent="Widget.MaterialComponents.MaterialCalendar.Year">
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

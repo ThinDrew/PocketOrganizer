@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.example.pocketorganizer.adapter.DayOfWeekAdapter;
 import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.entities.Note;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SETTINGS = 2;
     private RecyclerView recyclerView;
     private DayOfWeekAdapter adapter;
-    private TextView monthTextView;
+    private TextView dateTextView;
     private CalendarHelper calendarHelper;
     private AppDatabase database;
 
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 adapter.updateData(week, somedayNotes);
-                monthTextView.setText(calendarHelper.getMonthText());
+                dateTextView.setText(calendarHelper.getMonthText());
             });
         }).start();
     }
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Инициализация Views
         recyclerView = findViewById(R.id.weekRecyclerView);
-        monthTextView = findViewById(R.id.monthText);
+        dateTextView = findViewById(R.id.dateTextView);
 
         // Настройка RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -80,11 +82,37 @@ public class MainActivity extends AppCompatActivity {
             displayWeek();
         });
 
-        //Обработка кнопки аккаунта/настроек
+        // Обработка кнопки аккаунта/настроек
         ImageButton settingsButton = findViewById(R.id.accountButton);
         settingsButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivityForResult(intent, REQUEST_CODE_SETTINGS);
+        });
+
+        // Обработка нажатия на TextView с датой
+        dateTextView.setOnClickListener(v -> {
+            // Создаем MaterialDatePicker
+            MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Выберите дату")
+                    .setTheme(R.style.CustomMaterialDatePicker)
+                    .build();
+
+            // Показываем DatePicker
+            materialDatePicker.show(getSupportFragmentManager(), "DATE_PICKER_TAG");
+
+            // Добавляем обработчик для выбранной даты
+            materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+                // 'selection' хранит выбранную дату в миллисекундах от эпохи
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(selection);
+
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int month = calendar.get(Calendar.MONTH);
+                int year = calendar.get(Calendar.YEAR);
+
+                calendarHelper.setWeekByDate(day, month, year);
+                displayWeek();
+            });
         });
     }
 

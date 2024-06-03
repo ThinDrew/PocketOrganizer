@@ -15,7 +15,7 @@
         tools:ignore="MissingConstraints">
 
         <TextView
-            android:id="@+id/monthText"
+            android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
