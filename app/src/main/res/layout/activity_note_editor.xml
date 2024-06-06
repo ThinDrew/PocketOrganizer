@@ -4,8 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/extraDarkBlue"
-    android:padding="16dp">
+    android:background="@color/darkBlue">
 
     <EditText
         android:id="@+id/titleEditText"
@@ -14,7 +13,10 @@
         android:hint="Заголовок"
         android:textColorHint="@color/lightPurple"
         android:inputType="textCapSentences"
-        android:autofillHints="Enter a title"/>
+        android:autofillHints="Enter a title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"/>
 
     <EditText
         android:id="@+id/descriptionEditText"
@@ -25,7 +27,65 @@
         android:inputType="textMultiLine|textCapSentences"
         android:lines="4"
         android:minLines="2"
-        android:autofillHints="Enter a description"/>
+        android:autofillHints="Enter a description"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/blue"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="3dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/list_icon"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:id="@+id/toDoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Список дел"
+                android:textColor="@color/white"
+                android:textSize="22sp"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <ImageButton
+                    android:id="@+id/addToDoItemButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/custom_add_button"
+                    android:contentDescription="Add new ToDo"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/toDoRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+    </LinearLayout>
 
 <!--    <Button-->
 <!--        android:id="@+id/copyNoteButton"-->

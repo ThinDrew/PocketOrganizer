@@ -8,10 +8,17 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketorganizer.R;
+import com.example.pocketorganizer.adapter.ToDoItemAdapter;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.model.Note;
+import com.example.pocketorganizer.model.ToDoItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
@@ -38,6 +45,13 @@ public class NoteEditorActivity extends AppCompatActivity {
         descriptionEditText = findViewById(R.id.descriptionEditText);
         Button saveButton = findViewById(R.id.saveButton);
         Button deleteButton = findViewById(R.id.deleteNoteButton);
+
+        List<ToDoItem> toDoList = new ArrayList<>();
+
+        RecyclerView recyclerView = findViewById(R.id.toDoRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ToDoItemAdapter toDoItemAdapter = new ToDoItemAdapter(this, toDoList);
+        recyclerView.setAdapter(toDoItemAdapter);
 
         Intent intent = getIntent();
         String noteDate = intent.getStringExtra("noteDate");

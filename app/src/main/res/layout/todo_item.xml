@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:ignore="MissingConstraints"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="3dp">
+
+    <ImageButton
+        android:id="@+id/checkSquareButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/check_square"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="Complete ToDo"/>
+
+    <EditText
+        android:id="@+id/toDoEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:inputType="textCapSentences"
+        android:background="@android:color/transparent"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <ImageButton
+            android:id="@+id/deleteToDoButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/delete_todo_button"
+            android:contentDescription="Delete ToDo"/>
+    </LinearLayout>
+
+
+</LinearLayout>

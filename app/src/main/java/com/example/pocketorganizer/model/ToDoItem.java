@@ -6,13 +6,51 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class ToDoItem {
+
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     @ColumnInfo(name = "note_id")
-    public int noteId;
+    private int noteId;
 
-    public String description;
+    private String description;
 
-    public boolean isCompleted;
+    private boolean isCompleted;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void complete(){
+        this.isCompleted = !this.isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
+    }
 }
+
