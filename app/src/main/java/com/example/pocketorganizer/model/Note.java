@@ -1,4 +1,4 @@
-package com.example.pocketorganizer.entities;
+package com.example.pocketorganizer.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

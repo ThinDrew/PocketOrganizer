@@ -6,10 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.pocketorganizer.dao.NoteDao;
-import com.example.pocketorganizer.entities.Note;
+import com.example.pocketorganizer.model.Note;
+import com.example.pocketorganizer.model.ToDoItem;
 
-@Database(entities = {Note.class}, version = 2)
+@Database(entities = {Note.class, ToDoItem.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 

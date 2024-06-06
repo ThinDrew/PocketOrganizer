@@ -18,7 +18,7 @@ import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.activity.MainActivity;
 import com.example.pocketorganizer.activity.NoteEditorActivity;
 import com.example.pocketorganizer.database.AppDatabase;
-import com.example.pocketorganizer.entities.Note;
+import com.example.pocketorganizer.model.Note;
 
 import java.util.ArrayList;
 

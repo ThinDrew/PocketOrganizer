@@ -1,6 +1,6 @@
 package com.example.pocketorganizer;
 
-import com.example.pocketorganizer.entities.Note;
+import com.example.pocketorganizer.model.Note;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

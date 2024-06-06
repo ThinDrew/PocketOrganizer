@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.database.AppDatabase;
-import com.example.pocketorganizer.entities.Note;
+import com.example.pocketorganizer.model.Note;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
@@ -84,7 +84,7 @@ public class NoteEditorActivity extends AppCompatActivity {
             if (isEditMode) {
                 AppDatabase.getInstance(this).noteDao().update(currentNote);
             } else {
-                AppDatabase.getInstance(this).noteDao().insert(currentNote);
+                AppDatabase.getInstance(this).noteDao().insertNote(currentNote);
             }
             //Закрываем Activity
             runOnUiThread(() -> {

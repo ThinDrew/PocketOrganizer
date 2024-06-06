@@ -1,12 +1,15 @@
-package com.example.pocketorganizer.dao;
+package com.example.pocketorganizer.database;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.pocketorganizer.entities.Note;
+import com.example.pocketorganizer.model.Note;
+import com.example.pocketorganizer.model.NoteWithToDo;
+import com.example.pocketorganizer.model.ToDoItem;
 
 import java.util.List;
 
@@ -14,7 +17,14 @@ import java.util.List;
 public interface NoteDao {
 
     @Insert
-    void insert(Note note);
+    void insertNote(Note note);
+
+    @Insert
+    void insertToDo(ToDoItem toDoItem);
+
+    @Transaction
+    @Query("SELECT * FROM notes WHERE id = :noteId")
+    NoteWithToDo getNoteWithTodos(int noteId);
 
     @Update
     void update(Note note);

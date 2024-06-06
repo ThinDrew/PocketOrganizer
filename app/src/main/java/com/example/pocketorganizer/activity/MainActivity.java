@@ -16,7 +16,7 @@ import com.example.pocketorganizer.DayOfWeek;
 import com.example.pocketorganizer.adapter.DayOfWeekAdapter;
 import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.database.AppDatabase;
-import com.example.pocketorganizer.entities.Note;
+import com.example.pocketorganizer.model.Note;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.util.ArrayList;
