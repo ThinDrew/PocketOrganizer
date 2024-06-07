@@ -96,7 +96,7 @@ public class DailyNoteAdapter extends RecyclerView.Adapter<DailyNoteAdapter.View
     }
 
     private void updateNoteInDatabase(ViewHolder holder, Note note) {
-        new Thread(() -> AppDatabase.getInstance(holder.itemView.getContext()).noteDao().update(note)).start();
+        new Thread(() -> AppDatabase.getInstance(holder.itemView.getContext()).noteDao().updateNote(note)).start();
     }
     @Override
     public int getItemCount() {

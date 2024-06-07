@@ -9,11 +9,12 @@ import androidx.room.RoomDatabase;
 import com.example.pocketorganizer.model.Note;
 import com.example.pocketorganizer.model.ToDoItem;
 
-@Database(entities = {Note.class, ToDoItem.class}, version = 3)
+@Database(entities = {Note.class, ToDoItem.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 
     public abstract NoteDao noteDao();
+    public abstract ToDoDao toDoDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {

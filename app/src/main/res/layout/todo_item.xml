@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     tools:ignore="MissingConstraints"
@@ -19,27 +19,22 @@
 
     <EditText
         android:id="@+id/toDoEditText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:textSize="20sp"
         android:inputType="textCapSentences"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:textColor="@color/lightPurple"
+        android:hint="Дело"/>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
-
-        <ImageButton
-            android:id="@+id/deleteToDoButton"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/delete_todo_button"
-            android:contentDescription="Delete ToDo"/>
-    </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/deleteToDoButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/delete_todo_button"
+        android:contentDescription="Delete ToDo"/>
 
 </LinearLayout>

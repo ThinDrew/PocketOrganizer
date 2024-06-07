@@ -31,7 +31,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void deleteAllNotes(){
         AppDatabase database = AppDatabase.getInstance(getApplicationContext());
-        new Thread(() -> database.noteDao().deleteAllNotes()).start();
+        new Thread(() -> {
+            database.noteDao().deleteAllNotes();
+            database.toDoDao().deleteAllToDos();
+        }).start();
 
         //Отображение короткого всплывающего уведомления
         LayoutInflater inflater = getLayoutInflater();

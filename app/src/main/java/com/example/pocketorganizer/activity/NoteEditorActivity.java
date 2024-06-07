@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,9 @@ public class NoteEditorActivity extends AppCompatActivity {
     private EditText descriptionEditText;
     private boolean isEditMode = false;
     private Note currentNote;
+    private List<ToDoItem> toDoList;
+    private ToDoItemAdapter toDoItemAdapter;
+    private int newCount = -1;
 
     private void showDeleteConfirmationDialog() {
         new AlertDialog.Builder(this, R.style.CustomAlertDialog)
@@ -45,28 +49,30 @@ public class NoteEditorActivity extends AppCompatActivity {
         descriptionEditText = findViewById(R.id.descriptionEditText);
         Button saveButton = findViewById(R.id.saveButton);
         Button deleteButton = findViewById(R.id.deleteNoteButton);
-
-        List<ToDoItem> toDoList = new ArrayList<>();
-
-        RecyclerView recyclerView = findViewById(R.id.toDoRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ToDoItemAdapter toDoItemAdapter = new ToDoItemAdapter(this, toDoList);
-        recyclerView.setAdapter(toDoItemAdapter);
+        ImageButton addToDoItemButton = findViewById(R.id.addToDoItemButton);
 
         Intent intent = getIntent();
         String noteDate = intent.getStringExtra("noteDate");
+
+        toDoList = new ArrayList<>();
+        RecyclerView recyclerView = findViewById(R.id.toDoRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //Если мы открываем это Activity для редактирования заметки
         if (intent.hasExtra("note_id")) {
             isEditMode = true;
             int noteId = intent.getIntExtra("note_id", -1);
             new Thread(() -> {
-                currentNote = AppDatabase.getInstance(this).noteDao().getById(noteId);
+                AppDatabase database = AppDatabase.getInstance(this);
+                currentNote = database.noteDao().getById(noteId);
+                toDoList = database.noteDao().getNoteWithTodos(noteId).toDoItems;
 
                 runOnUiThread(() -> {
                     if (currentNote != null) {
                         titleEditText.setText(currentNote.getTitle());
                         descriptionEditText.setText(currentNote.getDescription());
+                        toDoItemAdapter = new ToDoItemAdapter(this, toDoList);
+                        recyclerView.setAdapter(toDoItemAdapter);
                     }
                 });
             }).start();
@@ -77,11 +83,29 @@ public class NoteEditorActivity extends AppCompatActivity {
             currentNote.setDate(noteDate);
             currentNote.setChecked(false);
             deleteButton.setVisibility(View.GONE);
+
+            toDoList = new ArrayList<>();
+            toDoItemAdapter = new ToDoItemAdapter(this, toDoList);
+            recyclerView.setAdapter(toDoItemAdapter);
         }
 
         //Обработка кнопок
         saveButton.setOnClickListener(view -> saveNote());
         deleteButton.setOnClickListener(view -> showDeleteConfirmationDialog());
+        addToDoItemButton.setOnClickListener(view -> addToDoItem());
+    }
+
+    private void addToDoItem() {
+        ToDoItem newToDoItem = new ToDoItem();
+        newToDoItem.setNoteId(currentNote.getId());
+        newToDoItem.setDescription("");
+        newToDoItem.setCompleted(false);
+        newToDoItem.setId(newCount);
+        newCount--;
+
+        toDoList.add(newToDoItem);
+        toDoItemAdapter.notifyItemInserted(toDoList.size() - 1);
+        toDoItemAdapter.tempToDoItems.add(newToDoItem);
     }
 
     private void saveNote() {
@@ -95,10 +119,36 @@ public class NoteEditorActivity extends AppCompatActivity {
         currentNote.setDescription(description);
 
         new Thread(() -> {
-            if (isEditMode) {
-                AppDatabase.getInstance(this).noteDao().update(currentNote);
-            } else {
-                AppDatabase.getInstance(this).noteDao().insertNote(currentNote);
+            int noteId = currentNote.getId();
+            AppDatabase database = AppDatabase.getInstance(this);
+
+            if (isEditMode){
+                database.noteDao().updateNote(currentNote);
+            }
+            else{
+                noteId = (int)database.noteDao().insertNote(currentNote);
+            }
+
+            toDoItemAdapter.updateToDoItems();
+
+            // Удаление дел
+            List<ToDoItem> deletedToDoItems = toDoItemAdapter.getDeletedToDoItems();
+            for (ToDoItem item : deletedToDoItems){
+                database.toDoDao().deleteToDoItem(item);
+            }
+
+            // Добавление/Обновление дел
+            List<ToDoItem> tempToDoItems = toDoItemAdapter.getTempToDoItems();
+            for (ToDoItem item : tempToDoItems){
+                if (item.getId() < 0){
+                    ToDoItem newItem = new ToDoItem();
+                    newItem.setCompleted(item.isCompleted());
+                    newItem.setDescription(item.getDescription());
+                    newItem.setNoteId(noteId);
+                    database.toDoDao().insertToDoItem(newItem);
+                }
+                else
+                    database.toDoDao().updateToDoItem(item);
             }
             //Закрываем Activity
             runOnUiThread(() -> {
@@ -110,7 +160,12 @@ public class NoteEditorActivity extends AppCompatActivity {
 
     private void deleteNote() {
         new Thread(() -> {
-            AppDatabase.getInstance(this).noteDao().delete(currentNote);
+            AppDatabase database = AppDatabase.getInstance(this);
+            List<ToDoItem> allToDoItems = database.noteDao().getNoteWithTodos(currentNote.getId()).toDoItems;
+            for (ToDoItem item : allToDoItems){
+                database.toDoDao().deleteToDoItem(item);
+            }
+            database.noteDao().deleteNote(currentNote);
             //Закрываем Activity
             runOnUiThread(() -> {
                 setResult(RESULT_OK);
