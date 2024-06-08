@@ -30,6 +30,7 @@ public class NoteEditorActivity extends AppCompatActivity {
     private List<ToDoItem> toDoList;
     private ToDoItemAdapter toDoItemAdapter;
     private int newCount = -1;
+    private boolean isListVisible = true;
 
     private void showDeleteConfirmationDialog() {
         new AlertDialog.Builder(this, R.style.CustomAlertDialog)
@@ -50,6 +51,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.saveButton);
         Button deleteButton = findViewById(R.id.deleteNoteButton);
         ImageButton addToDoItemButton = findViewById(R.id.addToDoItemButton);
+        ImageButton showListButton = findViewById(R.id.showListButton);
 
         Intent intent = getIntent();
         String noteDate = intent.getStringExtra("noteDate");
@@ -57,6 +59,8 @@ public class NoteEditorActivity extends AppCompatActivity {
         toDoList = new ArrayList<>();
         RecyclerView recyclerView = findViewById(R.id.toDoRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        showList(recyclerView, showListButton);
 
         //Если мы открываем это Activity для редактирования заметки
         if (intent.hasExtra("note_id")) {
@@ -93,6 +97,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> saveNote());
         deleteButton.setOnClickListener(view -> showDeleteConfirmationDialog());
         addToDoItemButton.setOnClickListener(view -> addToDoItem());
+        showListButton.setOnClickListener(view -> showList(recyclerView, showListButton));
     }
 
     private void addToDoItem() {
@@ -172,5 +177,18 @@ public class NoteEditorActivity extends AppCompatActivity {
                 finish();
             });
         }).start();
+    }
+
+    private void showList(RecyclerView recyclerView, ImageButton showListButton){
+        isListVisible = !isListVisible;
+
+        if (isListVisible) {
+            recyclerView.setVisibility(View.VISIBLE);
+            showListButton.setBackgroundResource(R.drawable.chevron_down);
+        }
+        else{
+            recyclerView.setVisibility(View.GONE);
+            showListButton.setBackgroundResource(R.drawable.chevron_right);
+        }
     }
 }

@@ -34,7 +34,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,10 +71,20 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/custom_add_button"
                     android:contentDescription="Add new ToDo"/>
+
+                <ImageButton
+                    android:id="@+id/showListButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/chevron_down"
+                    android:contentDescription="Show ToDo List"/>
 
             </LinearLayout>
         </LinearLayout>
