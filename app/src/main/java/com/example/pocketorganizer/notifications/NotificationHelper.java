@@ -19,6 +19,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.pocketorganizer.R;
+import com.example.pocketorganizer.activity.MainActivity;
 
 import java.text.SimpleDateFormat;
 
@@ -33,7 +34,7 @@ public class NotificationHelper {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
         channel.enableVibration(true);
-        channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+        channel.setVibrationPattern(new long[]{0, 1000});
 
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
         if (notificationManager != null) {
@@ -94,7 +95,6 @@ public class NotificationHelper {
     public static void updateScheduledNotification(Context context, int noteId, String noteTitle, Calendar newCalendar) {
         // Отмена существующего уведомления
         cancelScheduledNotification(context, noteId);
-
         // Установка нового уведомления
         setAlarm(context, noteId, noteTitle, newCalendar);
     }
@@ -106,12 +106,23 @@ public class NotificationHelper {
                 return;
             }
 
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    context,
+                    noteId,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.check_circle_blue)
                     .setContentTitle(noteTitle)
                     .setContentText(time)
+                    .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setVibrate(new long[]{0, 1000});
+                    .setVibrate(new long[]{0, 1000})
+                    .setAutoCancel(true);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(noteId, builder.build());

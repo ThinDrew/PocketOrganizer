@@ -1,11 +1,16 @@
 package com.example.pocketorganizer.activity;
 
+import android.annotation.SuppressLint;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,9 +22,14 @@ import com.example.pocketorganizer.adapter.ToDoItemAdapter;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.model.Note;
 import com.example.pocketorganizer.model.ToDoItem;
+import com.example.pocketorganizer.notifications.NotificationHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
@@ -31,6 +41,22 @@ public class NoteEditorActivity extends AppCompatActivity {
     private ToDoItemAdapter toDoItemAdapter;
     private int newCount = -1;
     private boolean isListVisible = true;
+    private String timeText;
+    private int notificationHour;
+    private int notificationMinute;
+    private ImageButton deleteNotificationButton;
+    private TextView timeInput;
+    private ImageButton showListButton;
+    private RecyclerView recyclerView;
+
+    private enum NotificationStatus {
+        NOTIFICATION_NULL,
+        NOTIFICATION_EXISTED,
+        NOTIFICATION_ADDED,
+        NOTIFICATION_CHANGED,
+        NOTIFICATION_DELETED
+    }
+    private NotificationStatus notificationStatus = NotificationStatus.NOTIFICATION_NULL;
 
     private void showDeleteConfirmationDialog() {
         new AlertDialog.Builder(this, R.style.CustomAlertDialog)
@@ -51,16 +77,22 @@ public class NoteEditorActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.saveButton);
         Button deleteButton = findViewById(R.id.deleteNoteButton);
         ImageButton addToDoItemButton = findViewById(R.id.addToDoItemButton);
-        ImageButton showListButton = findViewById(R.id.showListButton);
+        showListButton = findViewById(R.id.showListButton);
+        timeInput = findViewById(R.id.timeInputTextView);
+        deleteNotificationButton = findViewById(R.id.deleteNotificationButton);
+        deleteNotificationButton.setVisibility(View.GONE);
 
         Intent intent = getIntent();
         String noteDate = intent.getStringExtra("noteDate");
+        if (Objects.equals(noteDate, "Someday")) {
+            findViewById(R.id.notificationLayout).setVisibility(View.GONE);
+        }
 
         toDoList = new ArrayList<>();
-        RecyclerView recyclerView = findViewById(R.id.toDoRecyclerView);
+        recyclerView = findViewById(R.id.toDoRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        showList(recyclerView, showListButton);
+        showList();
 
         //Если мы открываем это Activity для редактирования заметки
         if (intent.hasExtra("note_id")) {
@@ -73,6 +105,17 @@ public class NoteEditorActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if (currentNote != null) {
+                        if (currentNote.getNotificationTime() != null && currentNote.getNotificationTime().length() == 5){
+                            timeText = currentNote.getNotificationTime();
+                            notificationStatus = NotificationStatus.NOTIFICATION_EXISTED;
+                            timeInput.setText("Напомнить в " + timeText);
+                            deleteNotificationButton.setVisibility(View.VISIBLE);
+                        }
+
+                        if (Objects.equals(currentNote.getDate(), "Someday")) {
+                            findViewById(R.id.notificationLayout).setVisibility(View.GONE);
+                        }
+
                         titleEditText.setText(currentNote.getTitle());
                         descriptionEditText.setText(currentNote.getDescription());
                         toDoItemAdapter = new ToDoItemAdapter(this, toDoList);
@@ -93,11 +136,51 @@ public class NoteEditorActivity extends AppCompatActivity {
             recyclerView.setAdapter(toDoItemAdapter);
         }
 
-        //Обработка кнопок
+        // Обработка кнопок
         saveButton.setOnClickListener(view -> saveNote());
         deleteButton.setOnClickListener(view -> showDeleteConfirmationDialog());
         addToDoItemButton.setOnClickListener(view -> addToDoItem());
-        showListButton.setOnClickListener(view -> showList(recyclerView, showListButton));
+        showListButton.setOnClickListener(view -> showList());
+        // Работа с уведомлениями
+        timeInput.setOnClickListener(view -> pickTime());
+        deleteNotificationButton.setOnClickListener(view -> deleteNotification());
+    }
+
+    private void pickTime(){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String hourText = hourOfDay < 10? "0" + hourOfDay : hourOfDay + "";
+                        String minuteText = minute < 10? "0" + minute : minute + "";
+                        timeText = hourText + ":" + minuteText;
+                        timeInput.setText("Напомнить в " + timeText);
+
+                        notificationHour = hourOfDay;
+                        notificationMinute = minute;
+
+                        if (notificationStatus == NotificationStatus.NOTIFICATION_NULL)
+                            notificationStatus = NotificationStatus.NOTIFICATION_ADDED;
+                        else if (notificationStatus != NotificationStatus.NOTIFICATION_ADDED)
+                            notificationStatus = NotificationStatus.NOTIFICATION_CHANGED;
+
+                        deleteNotificationButton.setVisibility(View.VISIBLE);
+                    }
+                }, hour, minute, true);
+        timePickerDialog.show();
+    }
+
+    private void deleteNotification(){
+        deleteNotificationButton.setVisibility(View.GONE);
+        if (notificationStatus == NotificationStatus.NOTIFICATION_ADDED)
+            notificationStatus = NotificationStatus.NOTIFICATION_NULL;
+        else if (notificationStatus == NotificationStatus.NOTIFICATION_CHANGED || notificationStatus == NotificationStatus.NOTIFICATION_EXISTED)
+            notificationStatus = NotificationStatus.NOTIFICATION_DELETED;
+        timeInput.setText("Введите время...");
     }
 
     private void addToDoItem() {
@@ -111,6 +194,9 @@ public class NoteEditorActivity extends AppCompatActivity {
         toDoList.add(newToDoItem);
         toDoItemAdapter.notifyItemInserted(toDoList.size() - 1);
         toDoItemAdapter.tempToDoItems.add(newToDoItem);
+
+        if (!isListVisible)
+            showList();
     }
 
     private void saveNote() {
@@ -132,8 +218,8 @@ public class NoteEditorActivity extends AppCompatActivity {
             }
             else{
                 noteId = (int)database.noteDao().insertNote(currentNote);
+                currentNote.setId(noteId);
             }
-
             toDoItemAdapter.updateToDoItems();
 
             // Удаление дел
@@ -155,6 +241,42 @@ public class NoteEditorActivity extends AppCompatActivity {
                 else
                     database.toDoDao().updateToDoItem(item);
             }
+
+            // Работа с уведомлениями
+            if (notificationStatus != NotificationStatus.NOTIFICATION_NULL && notificationStatus != NotificationStatus.NOTIFICATION_EXISTED) {
+                // Если строка в формате HH:MM
+                if (timeText.length() == 5){
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    try {
+                        // Устанавливаем время для уведомления
+                        Date date = dateFormat.parse(currentNote.getDate());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(date);
+                        calendar.set(Calendar.HOUR_OF_DAY, notificationHour);
+                        calendar.set(Calendar.MINUTE, notificationMinute);
+
+                        switch(notificationStatus){
+                            case NOTIFICATION_ADDED:
+                                NotificationHelper.scheduleNotification(this, noteId, currentNote.getTitle(), calendar);
+                                currentNote.setNotificationTime(timeText);
+                                break;
+                            case NOTIFICATION_CHANGED:
+                                NotificationHelper.updateScheduledNotification(this, noteId, currentNote.getTitle(), calendar);
+                                currentNote.setNotificationTime(timeText);
+                                break;
+                            case NOTIFICATION_DELETED:
+                                NotificationHelper.cancelScheduledNotification(this, noteId);
+                                currentNote.setNotificationTime(null);
+                        }
+
+                        database.noteDao().updateNote(currentNote);
+
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             //Закрываем Activity
             runOnUiThread(() -> {
                 setResult(RESULT_OK);
@@ -170,6 +292,9 @@ public class NoteEditorActivity extends AppCompatActivity {
             for (ToDoItem item : allToDoItems){
                 database.toDoDao().deleteToDoItem(item);
             }
+            if (currentNote.getNotificationTime() != null){
+                NotificationHelper.cancelScheduledNotification(this, currentNote.getId());
+            }
             database.noteDao().deleteNote(currentNote);
             //Закрываем Activity
             runOnUiThread(() -> {
@@ -179,7 +304,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void showList(RecyclerView recyclerView, ImageButton showListButton){
+    private void showList(){
         isListVisible = !isListVisible;
 
         if (isListVisible) {

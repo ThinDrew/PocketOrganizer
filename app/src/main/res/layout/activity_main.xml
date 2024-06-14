@@ -18,7 +18,7 @@
             android:id="@+id/dateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:text="Сентябрь 2024"
             android:textColor="@color/white"
             android:textSize="30sp"/>

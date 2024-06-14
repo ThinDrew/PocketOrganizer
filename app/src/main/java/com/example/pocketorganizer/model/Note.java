@@ -16,6 +16,8 @@ public class Note {
 
     private boolean checked;
 
+    private String notificationTime;
+
     // Getters и Setters
     public int getId() {
         return id;
@@ -53,9 +55,19 @@ public class Note {
         this.checked = checked;
     }
 
-    public void check() {this.checked = !this.checked;}
+    public void check() {
+        this.checked = !this.checked;
+    }
 
     public boolean isChecked(){
         return this.checked;
+    }
+
+    public String getNotificationTime() {
+        return this.notificationTime;
+    }
+
+    public void setNotificationTime(String time) {
+        this.notificationTime = time;
     }
 }
