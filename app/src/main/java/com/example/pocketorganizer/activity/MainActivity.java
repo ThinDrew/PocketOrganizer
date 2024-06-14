@@ -17,6 +17,7 @@ import com.example.pocketorganizer.adapter.DayOfWeekAdapter;
 import com.example.pocketorganizer.R;
 import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.model.Note;
+import com.example.pocketorganizer.notifications.NotificationHelper;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NotificationHelper.createNotificationChannel(this);
 
         // Инициализация объектов
         calendarHelper = new CalendarHelper();
