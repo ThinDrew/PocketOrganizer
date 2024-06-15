@@ -1,7 +1,6 @@
 package com.example.pocketorganizer.activity;
 
 import android.annotation.SuppressLint;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +21,8 @@ import com.example.pocketorganizer.database.AppDatabase;
 import com.example.pocketorganizer.model.Note;
 import com.example.pocketorganizer.model.ToDoItem;
 import com.example.pocketorganizer.notifications.NotificationHelper;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -146,33 +146,46 @@ public class NoteEditorActivity extends AppCompatActivity {
         deleteNotificationButton.setOnClickListener(view -> deleteNotification());
     }
 
-    private void pickTime(){
+    private void pickTime() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String hourText = hourOfDay < 10? "0" + hourOfDay : hourOfDay + "";
-                        String minuteText = minute < 10? "0" + minute : minute + "";
-                        timeText = hourText + ":" + minuteText;
-                        timeInput.setText("Напомнить в " + timeText);
+        MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(hour)
+                .setMinute(minute)
+                .setTitleText("Выберите время")
+                .setTheme(R.style.CustomTimePickerTheme);
 
-                        notificationHour = hourOfDay;
-                        notificationMinute = minute;
+        final MaterialTimePicker materialTimePicker = builder.build();
 
-                        if (notificationStatus == NotificationStatus.NOTIFICATION_NULL)
-                            notificationStatus = NotificationStatus.NOTIFICATION_ADDED;
-                        else if (notificationStatus != NotificationStatus.NOTIFICATION_ADDED)
-                            notificationStatus = NotificationStatus.NOTIFICATION_CHANGED;
+        materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectedHour = materialTimePicker.getHour();
+                int selectedMinute = materialTimePicker.getMinute();
+                String hourText = selectedHour < 10 ? "0" + selectedHour : String.valueOf(selectedHour);
+                String minuteText = selectedMinute < 10 ? "0" + selectedMinute : String.valueOf(selectedMinute);
+                String timeText = hourText + ":" + minuteText;
+                timeInput.setText("Напомнить в " + timeText);
 
-                        deleteNotificationButton.setVisibility(View.VISIBLE);
-                    }
-                }, hour, minute, true);
-        timePickerDialog.show();
+                notificationHour = selectedHour;
+                notificationMinute = selectedMinute;
+
+                if (notificationStatus == NotificationStatus.NOTIFICATION_NULL) {
+                    notificationStatus = NotificationStatus.NOTIFICATION_ADDED;
+                } else if (notificationStatus != NotificationStatus.NOTIFICATION_ADDED) {
+                    notificationStatus = NotificationStatus.NOTIFICATION_CHANGED;
+                }
+
+                deleteNotificationButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        materialTimePicker.show(getSupportFragmentManager(), "MATERIAL_TIME_PICKER");
     }
+
 
     private void deleteNotification(){
         deleteNotificationButton.setVisibility(View.GONE);
