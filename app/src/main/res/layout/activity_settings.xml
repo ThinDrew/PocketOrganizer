@@ -37,31 +37,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/nightThemeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ночная тема"
-            android:textColor="@color/white"
-            android:textSize="20sp"/>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/themeSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:trackTint="@color/lightBlue"
-            app:thumbTint="@color/white"
-            android:scaleX="1.35"
-            android:scaleY="1.35"
-            />
-    </LinearLayout>
-
     <Button
         android:id="@+id/deleteAllNotesButton"
         android:layout_width="wrap_content"
@@ -74,5 +49,26 @@
         android:paddingTop="5dp"
         android:backgroundTint="@color/red"
         android:textColor="@color/darkBlue"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Другие элементы вашего UI могут располагаться здесь -->
+
+        <TextView
+            android:id="@+id/my_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Версия приложения: 1.0.0\nПриложение разработал:\nСтудент СибГУТИ группы ИП-016\n Никоноров А.С.\nдля выпускной квалификационной работы."
+            android:textAlignment="center"
+            android:textColor="@color/lightPurple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Другие элементы вашего UI могут располагаться здесь -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -64,15 +64,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_settings);
 
-        //Обработка Switch
-        SwitchCompat themeSwitch = findViewById(R.id.themeSwitch);
-        themeSwitch.setChecked(isDarkTheme);
-
-        themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferences.edit().putBoolean("DarkTheme", isChecked).apply();
-            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        });
-
         //Обработка кнопки удаления всех заметок
         Button settingsButton = findViewById(R.id.deleteAllNotesButton);
         settingsButton.setOnClickListener(view -> showDeleteConfirmationDialog());
